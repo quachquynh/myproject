@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Request;
+//use Illuminate\Http\Request;
 use DB;
 class AuthCheck extends Controller
 {
@@ -22,13 +23,12 @@ class AuthCheck extends Controller
     }
 
     public function dangky(Request $request) {
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required'
-        ]);
-        $user = User::create($data);
-        $token = $user->createToken('APIToken')->accessToken;
+        $data = new User;
+        $data->name = Request::get('name');
+        $data->email = Request::get('email');
+        $data->password = Request::get('password');
+        $data->save();
+        $token = $data->createToken('APIToken')->accessToken;
         return response()->json(['token' => $token], 200);
     }
 
