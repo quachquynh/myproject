@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('response',function() {
+   return response()->download('https://quachquynh.com/wp-content/uploads/2021/07/get-category-wordpress2-410x250.jpg');
+});

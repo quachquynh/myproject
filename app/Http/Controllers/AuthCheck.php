@@ -16,7 +16,6 @@ class AuthCheck extends Controller
 
     public function dangnhap(Request $request)
     {
-
         $user = User::where('email', Request::get('email'))->where('password', Request::get('password'))->first();
         $token = $user->createToken('APIToken')->accessToken;
         return response()->json(['token' => $token], 200);

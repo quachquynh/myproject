@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use App\Models\Blog;
 use Validator;
 use DB;
+use Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth; 
 
 class Posts extends Controller
 {
@@ -23,19 +26,12 @@ class Posts extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'detail' => 'required|max:255'
-        ]);
-
-        if($validator->fails()){
-            return response(['error' => $validator->errors(), 'Validation Error']);
-        }
-
-        $result = Blog::create($data);
-        return response()->json(['result' => $result], 200);
+        $data = new Blog;
+        $data->name = Request::get('name');
+        $data->detail = Request::get('detail');
+        $data->save();
+        $token = $data->createToken('APIToken')->accessToken;
+        return response()->json(['token' => $token], 200);
     }
 
     public function update(Request $request, $id)
